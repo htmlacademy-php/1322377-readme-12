@@ -1,7 +1,7 @@
 # Личный проект «Readme»
 
 * Студент: [Артём Черенков](https://up.htmlacademy.ru/php/12/user/1322377).
-* Наставник: `Неизвестно`.
+* Наставник: [Антон Попов](https://htmlacademy.ru/profile/joker).
 
 ---
 
