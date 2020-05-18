@@ -60,7 +60,7 @@ function cut_string($string, $max_length = 300) {
             $result_string .= " " . $words[$counter];
             $counter++;
         }
-        return "<p>" . "$result_string" . "..." . "</p>" . $read_more;
+        return "<p>" . $result_string . "..." . "</p>" . $read_more;
     }
 }
 ?>
@@ -383,7 +383,7 @@ function cut_string($string, $max_length = 300) {
                                     <cite>Неизвестный Автор</cite>
                                 </blockquote>
                             <?php elseif ($post['type'] === 'post-text'): ?>
-                                <p><?= print cut_string($post['content']); ?></p>
+                                <p><?= cut_string($post['content']); ?></p>
                             <?php elseif ($post['type'] === 'post-photo'): ?>
                                 <div class="post-photo__image-wrapper">
                                     <img src="img/<?= $post['content']; ?>" alt="Фото от пользователя" width="360" height="240">
