@@ -57,10 +57,10 @@ function cut_string($string, $max_length = 300) {
         $result_string = null;
         $counter = 0;
         while (strlen($result_string) < $max_length) {
-            if ($counter > 0)
-                $result_string .= " " . $words[$counter];
-            else
+            if ($counter === 0)
                 $result_string .= $words[$counter];
+            else
+                $result_string .= " " . $words[$counter];
             $counter++;
         }
         return '<p>' . $result_string . "..." . '</p>' . $read_more;
