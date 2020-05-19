@@ -57,18 +57,25 @@
             $result_string = null;
             $counter = 0;
             while (strlen($result_string) < $max_length) {
-                if ($counter === 0)
+                if (!$counter)
                     $result_string .= $words[$counter];
                 else
                     $result_string .= " " . $words[$counter];
                 $counter++;
             }
-            return '<p>' . $result_string . "..." . '</p>' . $read_more;
+            return '<p>' . $result_string . '...' . '</p>' . $read_more;
         }
     }
 
-    function include_template($path, $content = array()) {
-        if (file_exists($path)) {
+    /**
+      * Показ разметки с переменными
+      * @param {string} $path - название файла шаблона
+      * @param {Array} $content - переменные для шаблона
+      * @return {string} - готовая разметка
+      */
+
+    function include_template($path, $content = []) {
+        if (is_readable($path)) {
             ob_start(); // включает буферизацию вывода
             // заполняет буфер
             extract($content);
