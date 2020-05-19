@@ -18,7 +18,7 @@ $posts = [
     ], [
         'header' => 'Игра престолов',
         'type' => $post_types['text'],
-        'content' => 'Не могу дождаться начала финального сезона своего любимого сериала!',
+        'content' => 'Не могу дождаться начала финального сезона своего любимого сериала!Не могу дождаться начала финального сезона своего любимого сериала!Не могу дождаться начала финального сезона своего любимого сериала!Не могу дождаться начала финального сезона своего любимого сериала!Не могу дождаться начала финального сезона своего любимого сериала!Не могу дождаться начала финального сезона своего любимого сериала!Не могу дождаться начала финального сезона своего любимого сериала!Не могу дождаться начала финального сезона своего любимого сериала!',
         'user_name' => 'Владик',
         'user_pic' => 'userpic.jpg'
     ], [
@@ -47,6 +47,25 @@ $posts = [
         'user_pic' => 'userpic-larisa-small.jpg'
     ]
 ];
+
+function cut_string($string, $max_length = 300) {
+    if (strlen($string) <= $max_length)
+        return '<p>' . $string . '</p>';
+    else {
+        $read_more = '<a class="post-text__more-link" href="#">Читать далее</a>';
+        $words = explode(" ", $string, $max_length);
+        $result_string = null;
+        $counter = 0;
+        while (strlen($result_string) < $max_length) {
+            if ($counter === 0)
+                $result_string .= $words[$counter];
+            else
+                $result_string .= " " . $words[$counter];
+            $counter++;
+        }
+        return '<p>' . $result_string . "..." . '</p>' . $read_more;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -367,7 +386,7 @@ $posts = [
                                     <cite>Неизвестный Автор</cite>
                                 </blockquote>
                             <?php elseif ($post['type'] === 'post-text'): ?>
-                                <p><?= $post['content']; ?></p>
+                                <?= cut_string($post['content']); ?>
                             <?php elseif ($post['type'] === 'post-photo'): ?>
                                 <div class="post-photo__image-wrapper">
                                     <img src="img/<?= $post['content']; ?>" alt="Фото от пользователя" width="360" height="240">
