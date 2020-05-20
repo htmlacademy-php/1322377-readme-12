@@ -144,8 +144,8 @@
                                             alt="Аватар пользователя">
                                     </div>
                                     <div class="post__info">
-                                        <b class="post__author-name"><?=htmlspecialchars($post['user_name']); ?></b>
-                                        <time class="post__time" datetime="">дата</time>
+                                        <b class="post__author-name"><?= htmlspecialchars($post['user_name']); ?></b>
+                                        <time class="post__time" title="<?= $post['date']; ?>" datetime="<?= date('c', strtotime($post['date'])); ?>"><?= $post['rel_date']; ?></time>
                                     </div>
                                 </a>
                             </div>

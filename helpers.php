@@ -1,5 +1,43 @@
 <?php
 /**
+ * Преобразует интервал времени от даты публикации до текущего момента в относительный формат.
+ * @param string $date1 дата публикации
+ * @return string дата в относительном формате
+ */
+function get_rel_date($date1) {
+    $date2 = date('c');
+    $minute = 60;
+    $hour = $minute * 60;
+    $day = $hour * 24;
+    $week = $day * 7;
+    $month = $week * 4;
+
+    $interval = strtotime($date2) - strtotime($date1);
+
+    $isMinutes = $interval / $hour < 1;
+    $isHours = $interval / $hour >= 1 && $interval / $hour < 24;
+    $isDays = $interval / $hour >= 24 && $interval / $day < 7;
+    $isWeeks = $interval / $day >= 7 && $interval / $month < 1;
+    $isMonths = $interval / $month >= 1;
+
+    if ($isMinutes) {
+        return floor($interval / $minute) . ' ' . get_noun_plural_form($interval / $minute, 'минута', 'минуты', 'минут') . ' назад';
+    }
+    else if ($isHours) {
+        return floor($interval / $hour) . ' ' . get_noun_plural_form($interval / $hour, 'час', 'часа', 'часов') . ' назад';
+    }
+    else if ($isDays) {
+        return floor($interval / $day) . ' ' . get_noun_plural_form($interval / $day, 'день', 'дня', 'дней') . ' назад';
+    }
+    elseif ($isWeeks) {
+        return floor($interval / $week) . ' ' . get_noun_plural_form($interval / $week, 'неделя', 'недели', 'недель') . ' назад';
+    }
+    elseif ($isMonths) {
+        return floor($interval / $month) . ' ' . get_noun_plural_form($interval / $month, 'месяц', 'месяца', 'месяцев') . ' назад';
+    }
+}
+
+/**
   * Ограничение длины текста и добавление кнопки 'Читать далее'
   * @param {string} $string - обрабатываемый текст
   * @param {integer} $max_length - максимальная длина текста
@@ -278,3 +316,10 @@ function generate_random_date($index)
 
     return $dt;
 }
+
+/**
+ * Переводит дату в относительный формат
+ * @param string $date
+ *
+ * @return string $rel_date
+ */
