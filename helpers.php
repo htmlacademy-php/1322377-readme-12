@@ -1,5 +1,29 @@
 <?php
 /**
+  * Ограничение длины текста и добавление кнопки 'Читать далее'
+  * @param {string} $string - обрабатываемый текст
+  * @param {integer} $max_length - максимальная длина текста
+  * @return {string} - текст в нужных тегах
+  */
+  function cut_string($string, $max_length = 300) {
+    if (strlen($string) <= $max_length)
+        return '<p>' . $string . '</p>';
+    $read_more = '<a class="post-text__more-link" href="#">Читать далее</a>';
+    $words = explode(" ", $string, $max_length);
+    $result_string = null;
+    $counter = 0;
+    while (strlen($result_string) < $max_length) {
+        if (!$counter)
+            $result_string .= $words[$counter];
+        else
+            $result_string .= " " . $words[$counter];
+        $counter++;
+    }
+    return '<p>' . $result_string . '...' . '</p>' . $read_more;
+}
+
+
+/**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
  * Примеры использования:
@@ -133,19 +157,14 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
 function include_template($name, array $data = [])
 {
     $name = 'templates/' . $name;
-    $result = '';
-
     if (!is_readable($name)) {
-        return $result;
+        return '';
     }
-
     ob_start();
     extract($data);
     require $name;
 
-    $result = ob_get_clean();
-
-    return $result;
+    return ob_get_clean();
 }
 
 /**
