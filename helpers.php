@@ -1,5 +1,67 @@
 <?php
 /**
+ * Преобразует интервал времени от даты публикации до текущего момента в относительный формат.
+ * @param string $date1 дата публикации
+ * @return string дата в относительном формате
+ */
+function get_rel_date($date1) {
+    $date2 = date('c');
+    $minute = 60;
+    $hour = $minute * 60;
+    $day = $hour * 24;
+    $week = $day * 7;
+    $month = $week * 4;
+
+    $interval = strtotime($date2) - strtotime($date1);
+
+    $isMinutes = $interval / $hour < 1;
+    $isHours = $interval / $hour >= 1 && $interval / $hour < 24;
+    $isDays = $interval / $hour >= 24 && $interval / $day < 7;
+    $isWeeks = $interval / $day >= 7 && $interval / $month < 1;
+    $isMonths = $interval / $month >= 1;
+
+    if ($isMinutes) {
+        return floor($interval / $minute) . ' ' . get_noun_plural_form($interval / $minute, 'минута', 'минуты', 'минут') . ' назад';
+    }
+    else if ($isHours) {
+        return floor($interval / $hour) . ' ' . get_noun_plural_form($interval / $hour, 'час', 'часа', 'часов') . ' назад';
+    }
+    else if ($isDays) {
+        return floor($interval / $day) . ' ' . get_noun_plural_form($interval / $day, 'день', 'дня', 'дней') . ' назад';
+    }
+    elseif ($isWeeks) {
+        return floor($interval / $week) . ' ' . get_noun_plural_form($interval / $week, 'неделя', 'недели', 'недель') . ' назад';
+    }
+    elseif ($isMonths) {
+        return floor($interval / $month) . ' ' . get_noun_plural_form($interval / $month, 'месяц', 'месяца', 'месяцев') . ' назад';
+    }
+}
+
+/**
+  * Ограничение длины текста и добавление кнопки 'Читать далее'
+  * @param {string} $string - обрабатываемый текст
+  * @param {integer} $max_length - максимальная длина текста
+  * @return {string} - текст в нужных тегах
+  */
+  function cut_string($string, $max_length = 300) {
+    if (strlen($string) <= $max_length)
+        return '<p>' . $string . '</p>';
+    $read_more = '<a class="post-text__more-link" href="#">Читать далее</a>';
+    $words = explode(" ", $string, $max_length);
+    $result_string = null;
+    $counter = 0;
+    while (strlen($result_string) < $max_length) {
+        if (!$counter)
+            $result_string .= $words[$counter];
+        else
+            $result_string .= " " . $words[$counter];
+        $counter++;
+    }
+    return '<p>' . $result_string . '...' . '</p>' . $read_more;
+}
+
+
+/**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
  * Примеры использования:
@@ -133,19 +195,14 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
 function include_template($name, array $data = [])
 {
     $name = 'templates/' . $name;
-    $result = '';
-
     if (!is_readable($name)) {
-        return $result;
+        return '';
     }
-
     ob_start();
     extract($data);
     require $name;
 
-    $result = ob_get_clean();
-
-    return $result;
+    return ob_get_clean();
 }
 
 /**
