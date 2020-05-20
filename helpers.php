@@ -316,10 +316,3 @@ function generate_random_date($index)
 
     return $dt;
 }
-
-/**
- * Переводит дату в относительный формат
- * @param string $date
- *
- * @return string $rel_date
- */
