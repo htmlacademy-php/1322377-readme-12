@@ -49,3 +49,7 @@
             'user_pic' => 'userpic-larisa-small.jpg'
         ]
     ];
+
+    for ($i = 0; $i < count($posts); $i++) {
+        $posts[$i]['date'] = generate_random_date(5);
+    }

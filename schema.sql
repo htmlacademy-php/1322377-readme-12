@@ -1,0 +1,119 @@
+DROP DATABASE IF EXISTS readme;
+CREATE DATABASE readme
+DEFAULT CHARACTER SET utf8
+DEFAULT COLLATE utf8_general_ci;
+
+USE readme;
+
+SET FOREIGN_KEY_CHECKS=0;
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+  id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  email CHAR(255) NOT NULL UNIQUE KEY,
+  login CHAR(255) NOT NULL,
+  password CHAR(64) NOT NULL,
+  avatar_path CHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS posts;
+CREATE TABLE posts (
+  id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  title CHAR(255) NOT NULL,
+  user_id INT(11) UNSIGNED NOT NULL,
+  image CHAR(255) NOT NULL,
+  video CHAR(255) NOT NULL,
+  link CHAR(255) NOT NULL,
+  views_count INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  category_id INT(11) UNSIGNED NOT NULL,
+
+  KEY category_id (category_id),
+  KEY user_id (user_id),
+  CONSTRAINT posts_ibfk_1 FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT posts_ibfk_2 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS comments;
+CREATE TABLE comments (
+  id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  user_id INT(11) UNSIGNED NOT NULL,
+  post_id INT(11) UNSIGNED NOT NULL,
+  content TEXT NOT NULL,
+
+  KEY user_id (user_id),
+  KEY post_id (post_id),
+  CONSTRAINT comments_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT comments_ibfk_2 FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS posts_like;
+CREATE TABLE posts_like (
+  id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id INT(11) UNSIGNED NOT NULL,
+  post_id INT(11) UNSIGNED NOT NULL,
+
+  KEY user_id (user_id),
+  KEY post_id (post_id),
+  CONSTRAINT posts_like_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT posts_like_ibfk_2 FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS subscription;
+CREATE TABLE subscription (
+  id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id INT(11) UNSIGNED NOT NULL,
+  post_id INT(11) UNSIGNED NOT NULL,
+
+  KEY user_id (user_id),
+  KEY post_id (post_id),
+  CONSTRAINT posts_comment_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT posts_comment_ibfk_2 FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS messages;
+CREATE TABLE messages (
+  id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  content TEXT NOT NULL,
+  user_from_id INT(11) UNSIGNED NOT NULL,
+  user_to_id INT(11) UNSIGNED NOT NULL,
+
+  KEY user_from_id (user_from_id),
+  KEY user_to_id (user_to_id),
+  CONSTRAINT posts_message_ibfk_1 FOREIGN KEY (user_from_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT posts_message_ibfk_2 FOREIGN KEY (user_to_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS hashtag;
+CREATE TABLE hashtag (
+  id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  title CHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS ph;
+CREATE table ph (
+	id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	post_id INT(11) UNSIGNED NOT NULL,
+  tag_id INT(11) UNSIGNED NOT NULL
+);
+
+DROP TABLE IF EXISTS categories;
+CREATE TABLE categories (
+  id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name CHAR(255) NOT NULL,
+  class_name CHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO categories (name, class_name)
+VALUES ("quote", "post-quote"),
+			 ("text", "post-text"),
+			 ("photo", "post-photo"),
+       ("link", "post-link"),
+       ("video", "post-video");
+
+ALTER TABLE users ADD COLUMN token CHAR(32) NOT NULL AFTER avatar_path;
+
+SELECT id, name FROM readme.categories;

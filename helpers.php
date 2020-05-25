@@ -29,10 +29,10 @@ function get_rel_date($date1) {
     else if ($isDays) {
         return floor($interval / $day) . ' ' . get_noun_plural_form($interval / $day, 'день', 'дня', 'дней') . ' назад';
     }
-    elseif ($isWeeks) {
+    else if ($isWeeks) {
         return floor($interval / $week) . ' ' . get_noun_plural_form($interval / $week, 'неделя', 'недели', 'недель') . ' назад';
     }
-    elseif ($isMonths) {
+    else if ($isMonths) {
         return floor($interval / $month) . ' ' . get_noun_plural_form($interval / $month, 'месяц', 'месяца', 'месяцев') . ' назад';
     }
 }
