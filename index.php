@@ -1,6 +1,6 @@
 <?php
-    require 'helpers.php';
-    require 'data.php';
+    require 'assets/helpers.php';
+    require 'assets/data.php';
 
     $page_title = 'readme: популярное';
     $page_content = include_template('main.php', ['posts' => $posts]);
