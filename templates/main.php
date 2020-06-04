@@ -100,7 +100,7 @@
                                 <?= cut_string(htmlspecialchars($post['content'])); ?>
                             <?php elseif (htmlspecialchars($post['type']) === 'post-photo'): ?>
                                 <div class="post-photo__image-wrapper">
-                                    <img src="img/<?= htmlspecialchars($post['content']); ?>" alt="Фото от пользователя" width="360" height="240">
+                                    <img src="assets/img/<?= htmlspecialchars($post['content']); ?>" alt="Фото от пользователя" width="360" height="240">
                                 </div>
                             <?php elseif (htmlspecialchars($post['type']) === 'post-link'): ?>
                                 <div class="post-link__wrapper">
@@ -125,9 +125,9 @@
                             <div class="post-video__block">
                                 <div class="post-video__preview">
                                     <?php //=embed_youtube_cover();?>
-                                    <img src="img/coast-medium.jpg" alt="Превью к видео" width="360" height="188">
+                                    <img src="assets/img/coast-medium.jpg" alt="Превью к видео" width="360" height="188">
                                 </div>
-                                <a href="post-details.html" class="post-video__play-big button">
+                                <a href="views/post-details.html" class="post-video__play-big button">
                                     <svg class="post-video__play-big-icon" width="14" height="14">
                                         <use xlink:href="#icon-video-play-big"></use>
                                     </svg>
@@ -140,7 +140,7 @@
                             <div class="post__author">
                                 <a class="post__author-link" href="#" title="Автор">
                                     <div class="post__avatar-wrapper">
-                                        <img class="post__author-avatar" src="img/<?= htmlspecialchars($post['user_pic']); ?>"
+                                        <img class="post__author-avatar" src="assets/img/<?= htmlspecialchars($post['user_pic']); ?>"
                                             alt="Аватар пользователя">
                                     </div>
                                     <div class="post__info">
