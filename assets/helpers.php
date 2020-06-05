@@ -336,9 +336,9 @@ function get_categories ($link)
 function get_posts ($link)
 {
     $sql = 'SELECT p.title as header, c.name as type, p.content, u.name as user_name, u.avatar_path as user_pic, p.dt_add as date
-                FROM posts AS p, users AS u, categories as c
-                WHERE p.user_id = u.id AND c.id = p.category_id
-                ORDER BY p.views_count';
+            FROM posts AS p, users AS u, categories as c
+            WHERE p.user_id = u.id AND c.id = p.category_id
+            ORDER BY p.views_count';
     $result = mysqli_query($link, $sql);
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
