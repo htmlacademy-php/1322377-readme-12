@@ -1,7 +1,4 @@
 <?php
-    $is_auth = 1;
-    $user_name = 'Артём';
-
     $post_types = [
         'quote' => 'post-quote',
         'text' => 'post-text',

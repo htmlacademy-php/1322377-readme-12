@@ -1,9 +1,9 @@
 USE readme;
 
 INSERT INTO readme.users (email, name, password, avatar_path)
-VALUES ('larisa@gmail.com', 'Лариса', 'secret', 'avatar'),
-       ('vladik@gmail.com', 'Владик', 'secret', 'avatar'),
-       ('viktor@gmail.com', 'Виктор', 'secret', 'avatar');
+VALUES ('larisa@gmail.com', 'Лариса', 'secret', 'userpic-larisa-small.jpg'),
+       ('vladik@gmail.com', 'Владик', 'secret', 'userpic.jpg'),
+       ('viktor@gmail.com', 'Виктор', 'secret', 'userpic-mark.jpg');
 
 INSERT INTO readme.categories (name)
 VALUES ('post-quote'),

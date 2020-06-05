@@ -117,7 +117,6 @@
             </symbol>
         </svg>
     </div>
-
     <header class="header">
         <div class="header__wrapper container">
             <div class="header__logo-wrapper">
