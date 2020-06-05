@@ -1,7 +1,4 @@
 <?php
-    $is_auth = rand(0, 1);
-    $user_name = 'Артём';
-
     $post_types = [
         'quote' => 'post-quote',
         'text' => 'post-text',
@@ -14,7 +11,7 @@
         [
             'header' => 'Цитата',
             'type' => $post_types['quote'],
-            'content' => 'Мы в <script> любим только раз, а после ищем лишь похожих',
+            'content' => 'Мы в жизни любим только раз, а после ищем лишь похожих',
             'user_name' => 'Лариса',
             'user_pic' => 'userpic-larisa-small.jpg'
         ], [
