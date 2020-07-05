@@ -194,7 +194,7 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
  */
 function include_template($name, array $data = [])
 {
-    $name = 'templates/' . $name;
+    $name = 'private/views/' . $name;
     if (!is_readable($name)) {
         return '';
     }
