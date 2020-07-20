@@ -13,6 +13,8 @@ CREATE TABLE posts (
   title CHAR(255) NOT NULL,
   user_id INT(11) UNSIGNED NOT NULL,
   content TEXT NOT NULL,
+  quote_author TEXT,
+  link_title TEXT,
   views_count INT(11) UNSIGNED NOT NULL DEFAULT '0',
   category_id INT(11) UNSIGNED NOT NULL,
   hashtag_id INT(11) UNSIGNED NOT NULL DEFAULT '0',
@@ -78,5 +80,6 @@ CREATE TABLE hashtag (
 
 CREATE TABLE categories (
   id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  title CHAR(255) NOT NULL,
   name CHAR(255) NOT NULL
 ) ENGINE=InnoDB;

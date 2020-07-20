@@ -36,72 +36,42 @@
             <b class="popular__filters-caption filters__caption">Тип контента:</b>
             <ul class="popular__filters-list filters__list">
                 <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-                    <a class="filters__button filters__button--ellipse filters__button--all filters__button--active" href="#">
+                    <a class="filters__button filters__button--ellipse filters__button--all <?= (!$content_type || $content_type === 'all') ? 'filters__button--active' : '' ?>" href="<?= get_query_href(['content-type' => 'all'], '/index.php') ?>">
                         <span>Все</span>
                     </a>
                 </li>
-                <li class="popular__filters-item filters__item">
-                    <a class="filters__button filters__button--photo button" href="#">
-                        <span class="visually-hidden">Фото</span>
-                        <svg class="filters__icon" width="22" height="18">
-                            <use xlink:href="#icon-filter-photo"></use>
-                        </svg>
-                    </a>
-                </li>
-                <li class="popular__filters-item filters__item">
-                    <a class="filters__button filters__button--video button" href="#">
-                        <span class="visually-hidden">Видео</span>
-                        <svg class="filters__icon" width="24" height="16">
-                            <use xlink:href="#icon-filter-video"></use>
-                        </svg>
-                    </a>
-                </li>
-                <li class="popular__filters-item filters__item">
-                    <a class="filters__button filters__button--text button" href="#">
-                        <span class="visually-hidden">Текст</span>
-                        <svg class="filters__icon" width="20" height="21">
-                            <use xlink:href="#icon-filter-text"></use>
-                        </svg>
-                    </a>
-                </li>
-                <li class="popular__filters-item filters__item">
-                    <a class="filters__button filters__button--quote button" href="#">
-                        <span class="visually-hidden">Цитата</span>
-                        <svg class="filters__icon" width="21" height="20">
-                            <use xlink:href="#icon-filter-quote"></use>
-                        </svg>
-                    </a>
-                </li>
-                <li class="popular__filters-item filters__item">
-                    <a class="filters__button filters__button--link button" href="#">
-                        <span class="visually-hidden">Ссылка</span>
-                        <svg class="filters__icon" width="21" height="18">
-                            <use xlink:href="#icon-filter-link"></use>
-                        </svg>
-                    </a>
-                </li>
+              <?php foreach ($categories as $category): ?>
+                  <li class="popular__filters-item filters__item">
+                      <a class="filters__button filters__button--<?= $category['name'] ?> <?= $content_type === $category['name'] ? 'filters__button--active' : '' ?> button" href="<?= get_query_href(['content-type' => $category['name']], '/index.php') ?>">
+                          <span class="visually-hidden"><?= $category['title'] ?></span>
+                          <svg class="filters__icon" width="22" height="18">
+                              <use xlink:href="#icon-filter-<?= $category['name'] ?>"></use>
+                          </svg>
+                      </a>
+                  </li>
+              <?php endforeach;?>
             </ul>
         </div>
     </div>
     <div class="popular__posts">
       <?php foreach ($posts as $post): ?>
-          <article class="popular__post post <?= htmlspecialchars($post['type']); ?>">
+          <article class="popular__post post post-<?= htmlspecialchars($post['type']); ?>">
               <header class="post__header">
-                  <h2><?= htmlspecialchars($post['header']); ?></h2>
+                  <a href="/post.php?post_id=<?= $post['post_id'] ?>"><h2><?= htmlspecialchars($post['header']); ?></h2></a>
               </header>
               <div class="post__main">
-                <?php if (htmlspecialchars($post['type'])==='post-quote'): ?>
+                <?php if (htmlspecialchars($post['type']) ==='quote'): ?>
                     <blockquote>
                         <p><?= htmlspecialchars($post['content']); ?></p>
                         <cite>Неизвестный Автор</cite>
                     </blockquote>
-                <?php elseif (htmlspecialchars($post['type'])==='post-text'): ?>
+                <?php elseif (htmlspecialchars($post['type'])==='text'): ?>
                   <?= cut_string(htmlspecialchars($post['content'])); ?>
-                <?php elseif (htmlspecialchars($post['type'])==='post-photo'): ?>
+                <?php elseif (htmlspecialchars($post['type'])==='photo'): ?>
                     <div class="post-photo__image-wrapper">
                         <img src="assets/img/<?= htmlspecialchars($post['content']); ?>" alt="Фото от пользователя" width="360" height="240">
                     </div>
-                <?php elseif (htmlspecialchars($post['type'])==='post-link'): ?>
+                <?php elseif (htmlspecialchars($post['type'])==='link'): ?>
                     <div class="post-link__wrapper">
                         <a class="post-link__external" href="http://<?= htmlspecialchars($post['content']); ?>" title="Перейти по ссылке">
                             <div class="post-link__info-wrapper">
@@ -118,7 +88,7 @@
                         </a>
                     </div>
                     <!-- По идее должен быть и пост-видео -->
-                <?php elseif (htmlspecialchars($post['type'])==='post-video'): ?>
+                <?php elseif (htmlspecialchars($post['type'])==='video'): ?>
                     <div class="post-video__block">
                         <div class="post-video__preview">
                           <?php //=embed_youtube_cover();?>
