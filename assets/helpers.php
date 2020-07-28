@@ -194,7 +194,7 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
  */
 function include_template($name, array $data = [])
 {
-    $name = 'templates/' . $name;
+    $name = 'private/views/' . $name;
     if (!is_readable($name)) {
         return '';
     }
@@ -324,7 +324,7 @@ function generate_random_date($index)
  */
 function get_categories ($link)
 {
-    $sql = 'SELECT id, name FROM categories';
+    $sql = 'SELECT id, title, name FROM categories';
     $result = mysqli_query($link, $sql);
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
@@ -333,12 +333,102 @@ function get_categories ($link)
  * @param mysqli $link
  * @return array двумерный массив, полученный в ответ на запрос
  */
-function get_posts ($link)
-{
-    $sql = 'SELECT p.title as header, c.name as type, p.content, u.name as user_name, u.avatar_path as user_pic, p.dt_add as date
-            FROM posts AS p, users AS u, categories as c
+function get_posts ($link) {
+    $sql = 'SELECT p.title as header, 
+       					   p.content, 
+       					   p.dt_add as date, 
+       					 	 p.id as post_id, 
+       						 p.quote_author as quote_author,
+       						 p.link_title as link_title,
+       					   c.name as type, 
+       						 u.name as user_name, 
+       						 u.avatar_path as user_pic,
+       						 u.id as user_id,
+       					   s.user_on_whom_id as subs
+            FROM posts AS p, users AS u, categories as c, subs as s
             WHERE p.user_id = u.id AND c.id = p.category_id
             ORDER BY p.views_count';
     $result = mysqli_query($link, $sql);
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
+
+function get_posts_count ($link, $userid) {
+	$sql = 'SELECT p.title as header, 
+       					 p.id as post_id, 
+       					 u.name as user_name
+            FROM posts AS p, users AS u
+            WHERE p.user_id = u.id and u.id = ' . $userid;
+	$result = mysqli_query($link, $sql);
+	$user_posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
+	return count($user_posts);
+}
+
+function get_subs_count ($link, $userid) {
+	$sql = 'SELECT s.user_on_whom_id
+            FROM subs as s
+            WHERE s.user_on_whom_id = ' . $userid;
+	$result = mysqli_query($link, $sql);
+	$user_posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
+	return count($user_posts);
+}
+
+	/**
+	 * Фильтрует заданный массив постов по заданному типу контента
+	 * @param array $posts Список постов
+	 * @param string|null $post_type Тип поста, по которому нужно фильтровать
+	 * @return array Отфильтрованный массив
+	 */
+	function filter_posts (array $posts, $post_type) {
+		$filtered_array = [];
+		if ($post_type === 'all' || !isset($post_type)) {
+			return $posts;
+		}
+		foreach ($posts as $post) {
+			if ($post['type'] === $post_type) {
+				array_push($filtered_array, $post);
+			}
+		}
+		return $filtered_array;
+	};
+
+	/**
+	 * Формирует URL исходя из переданного пути и параметров запроса
+	 * @param array $params Массив с параметрами запроса
+	 * @param string $path Адрес страницы
+	 * @return string Сформированный URL
+	 */
+	function get_query_href(array $params, string $path): string {
+		$current_params = $_GET;
+		$merged_params = array_merge($current_params, $params);
+		$query = http_build_query($merged_params);
+
+		return $path . '?' . ($query ? $query : '');
+	}
+
+	/**
+	 * Проверяет, совпадает ли значение $value со значением какого-либо элемента массива $array с ключом $key. Если совпадает, возвращает соответствующий элемент массива.
+	 * @param array $array
+	 * @param $key
+	 * @param $value
+	 * @return object|int
+	 */
+	function is_value_in_array($array, $key, $value) {
+		foreach ($array as $item) {
+			if ($item[$key] === $value) {
+				return $item;
+			}
+		}
+		return 0;
+	}
+
+	function throw_404 () {
+		$page_content = include_template('404.php');
+		$layout_content = include_template('layout.php', [
+			'page_title' => 'Страница не найдена',
+			'page_content' => $page_content,
+			'is_auth' => 1
+		]);
+
+		print $layout_content;
+		die();
+	}
